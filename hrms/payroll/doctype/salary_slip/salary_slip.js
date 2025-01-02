@@ -1,5 +1,6 @@
 // Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 // License: GNU General Public License v3. See license.txt
+
 frappe.ui.form.on("Salary Slip", {
 	async onload_post_render(frm) {
         const is_bonus = (await frappe.db.get_value("Payroll Entry", frm.doc.payroll_entry, "custom_is_bonus")).message.custom_is_bonus;

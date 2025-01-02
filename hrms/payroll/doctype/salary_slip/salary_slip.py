@@ -808,8 +808,7 @@ class SalarySlip(TransactionBase):
 			flt(self.total_deduction) * flt(self.exchange_rate), self.precision("base_total_deduction")
 		)
 		self.net_pay = flt(self.gross_pay) - (
-			flt(self.total_deduction) + (flt(self.get("total_loan_repayment")) if not self.custom_is_bonus else 0)
-		)
+			flt(self.total_deduction) + (flt(self.get("total_loan_repayment")) if not self.custom_is_bonus else 0))
 		self.rounded_total = rounded(self.net_pay)
 		self.base_net_pay = flt(flt(self.net_pay) * flt(self.exchange_rate), self.precision("base_net_pay"))
 		self.base_rounded_total = flt(rounded(self.base_net_pay), self.precision("base_net_pay"))
