@@ -1948,7 +1948,7 @@ class SalarySlip(TransactionBase):
 				for deduction in self.deductions:
 					self.total_deduction += flt(deduction.amount, deduction.precision("amount"))
 			self.net_pay = (
-				flt(self.gross_pay) - flt(self.total_deduction) - ((flt(self.get("total_loan_repayment"))) if not self.custom_is_bonus else 0)
+				flt(self.gross_pay) - flt(self.total_deduction) - ((flt(self.get("total_loan_repayment"))) if not self.custom_is_bonus else 0) 
 			)
 		self.set_base_totals()
 
