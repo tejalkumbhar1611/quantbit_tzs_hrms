@@ -793,8 +793,9 @@ class SalarySlip(TransactionBase):
 
 		if self.salary_structure:
 			self.calculate_component_amounts("deductions")
-
-		set_loan_repayment(self)
+   
+		if not self.custom_is_bonus:
+			set_loan_repayment(self)
 
 		self.set_precision_for_component_amounts()
 		self.set_net_pay()
@@ -807,7 +808,7 @@ class SalarySlip(TransactionBase):
 			flt(self.total_deduction) * flt(self.exchange_rate), self.precision("base_total_deduction")
 		)
 		self.net_pay = flt(self.gross_pay) - (
-			flt(self.total_deduction) + flt(self.get("total_loan_repayment"))
+			flt(self.total_deduction) + (flt(self.get("total_loan_repayment")) if not self.custom_is_bonus else 0)
 		)
 		self.rounded_total = rounded(self.net_pay)
 		self.base_net_pay = flt(flt(self.net_pay) * flt(self.exchange_rate), self.precision("base_net_pay"))
@@ -1947,7 +1948,7 @@ class SalarySlip(TransactionBase):
 				for deduction in self.deductions:
 					self.total_deduction += flt(deduction.amount, deduction.precision("amount"))
 			self.net_pay = (
-				flt(self.gross_pay) - flt(self.total_deduction) - flt(self.get("total_loan_repayment"))
+				flt(self.gross_pay) - flt(self.total_deduction) - ((flt(self.get("total_loan_repayment"))) if not self.custom_is_bonus else 0)
 			)
 		self.set_base_totals()
 

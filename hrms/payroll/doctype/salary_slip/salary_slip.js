@@ -1,7 +1,21 @@
 // Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 // License: GNU General Public License v3. See license.txt
-
 frappe.ui.form.on("Salary Slip", {
+	async onload_post_render(frm) {
+        const is_bonus = (await frappe.db.get_value("Payroll Entry", frm.doc.payroll_entry, "custom_is_bonus")).message.custom_is_bonus;
+        if (is_bonus) {
+            frm.doc.loans = [];
+            frm.doc.total_loan_repayment = 0;
+            frm.refresh_field("total_loan_repayment");
+            if (frm.doc.deductions) {
+                frm.doc.deductions = frm.doc.deductions.filter(deduction => {
+                    return deduction.salary_component !== "Salary Advance" && deduction.salary_component !== "PAYE";
+                });
+                frm.refresh_field("deductions");
+            }
+        }
+    },
+
 	setup: function (frm) {
 		$.each(["earnings", "deductions"], function (i, table_fieldname) {
 			frm.get_field(table_fieldname).grid.editable_fields = [
